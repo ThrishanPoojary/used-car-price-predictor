@@ -1,815 +1,95 @@
-# used-car-price-predictor
-car price pedictor
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>AutoPredict | Used Car Price Predictor</title>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
-:root {
-    --bg: #080b0a;
-    --panel: #111714;
-    --panel2: #171f1b;
-    --green: #b6f36b;
-    --text: #f2f5f1;
-    --muted: #89958d;
-    --border: #26332b;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-.container {
-    width: min(1100px, 92%);
-    margin: auto;
-}
-
-/* NAVBAR */
-
-nav {
-    height: 80px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border);
-}
-
-.logo {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 23px;
-    font-weight: 700;
-    letter-spacing: -1px;
-}
-
-.logo span {
-    color: var(--green);
-}
-
-.nav-tag {
-    color: var(--green);
-    border: 1px solid #405b30;
-    padding: 8px 14px;
-    border-radius: 30px;
-    font-size: 12px;
-}
-
-/* HERO */
-
-.hero {
-    padding: 85px 0 55px;
-    text-align: center;
-}
-
-.eyebrow {
-    display: inline-block;
-    color: var(--green);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    margin-bottom: 22px;
-}
-
-.hero h1 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(36px, 6vw, 66px);
-    line-height: 1.08;
-    letter-spacing: -3px;
-    margin-bottom: 20px;
-}
-
-.hero h1 span {
-    color: var(--green);
-}
-
-.hero p {
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.8;
-    max-width: 560px;
-    margin: auto;
-}
-
-/* MAIN CARD */
-
-.predictor {
-    max-width: 850px;
-    margin: 20px auto 90px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 35px;
-    box-shadow: 0 25px 80px rgba(0,0,0,.25);
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 30px;
-}
-
-.card-header h2 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 23px;
-}
-
-.card-header p {
-    color: var(--muted);
-    font-size: 13px;
-    margin-top: 7px;
-}
-
-.status {
-    color: var(--green);
-    font-size: 11px;
-    white-space: nowrap;
-    background: #1d2b19;
-    padding: 8px 12px;
-    border-radius: 30px;
-}
-
-/* FORM */
-
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 22px;
-}
-
-.field {
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-}
-
-.field label {
-    color: #c5cec7;
-    font-size: 13px;
-    font-weight: 600;
-}
-
-input, select {
-    width: 100%;
-    height: 52px;
-    background: var(--panel2);
-    color: white;
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    padding: 0 14px;
-    outline: none;
-    font-size: 14px;
-    font-family: inherit;
-    transition: .2s;
-}
-
-input:focus, select:focus {
-    border-color: var(--green);
-    box-shadow: 0 0 0 3px rgba(182,243,107,.08);
-}
-
-select option {
-    background: #171f1b;
-}
-
-.full {
-    grid-column: 1 / -1;
-}
-
-/* BUTTON */
-
-.predict-btn {
-    width: 100%;
-    margin-top: 30px;
-    height: 58px;
-    background: var(--green);
-    color: #10170c;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 800;
-    cursor: pointer;
-    font-family: inherit;
-    transition: .25s;
-}
-
-.predict-btn:hover {
-    background: #d1ff9b;
-    transform: translateY(-2px);
-}
-
-.predict-btn:disabled {
-    opacity: .6;
-    cursor: wait;
-    transform: none;
-}
-
-/* RESULT */
-
-.result {
-    display: none;
-    margin-top: 25px;
-    padding: 25px;
-    background: #172219;
-    border: 1px solid #3b5932;
-    border-radius: 12px;
-    text-align: center;
-}
-
-.result.show {
-    display: block;
-    animation: appear .4s ease;
-}
-
-.result-label {
-    color: var(--muted);
-    font-size: 12px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-
-.result-price {
-    color: var(--green);
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(30px, 5vw, 45px);
-    font-weight: 700;
-    margin: 12px 0;
-}
-
-.result-message {
-    color: #b4c1b7;
-    font-size: 13px;
-    line-height: 1.6;
-}
-
-.error {
-    color: #ff9999;
-}
-
-@keyframes appear {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* INFO */
-
-.info {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    max-width: 850px;
-    margin: -55px auto 90px;
-}
-
-.info-box {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    padding: 22px;
-    border-radius: 12px;
-}
-
-.info-box h3 {
-    color: var(--green);
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 16px;
-    margin-bottom: 8px;
-}
-
-.info-box p {
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.6;
-}
-
-/* FOOTER */
-
-footer {
-    border-top: 1px solid var(--border);
-    padding: 28px 0;
-    text-align: center;
-    color: var(--muted);
-    font-size: 12px;
-}
-
-footer span {
-    color: var(--green);
-}
-
-/* MOBILE */
-
-@media(max-width: 650px) {
-    .hero {
-        padding: 60px 0 35px;
-    }
-
-    .hero h1 {
-        letter-spacing: -1.5px;
-    }
-
-    .predictor {
-        padding: 23px 17px;
-        margin-bottom: 80px;
-    }
-
-    .form-grid {
-        grid-template-columns: 1fr;
-        gap: 17px;
-    }
-
-    .full {
-        grid-column: auto;
-    }
-
-    .card-header {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .info {
-        grid-template-columns: 1fr;
-        margin-top: -45px;
-    }
-}
-</style>
-</head>
-
-<body>
-
-<div class="container">
-
-    <!-- NAVIGATION -->
-
-    <nav>
-        <div class="logo">
-            AUTO<span>PREDICT.</span>
-        </div>
-
-        <div class="nav-tag">
-            AI / ML PROJECT
-        </div>
-    </nav>
-
-    <!-- HERO -->
-
-    <section class="hero">
-
-        <div class="eyebrow">
-            MACHINE LEARNING POWERED
-        </div>
-
-        <h1>
-            Know Your Car's<br>
-            <span>Real Value.</span>
-        </h1>
-
-        <p>
-            Discover an estimated resale value for your used car.
-            Enter its specifications and let our machine learning
-            model do the analysis.
-        </p>
-
-    </section>
-
-    <!-- PREDICTION FORM -->
-
-    <section class="predictor">
-
-        <div class="card-header">
-
-            <div>
-                <h2>Vehicle Details</h2>
-                <p>Enter the details of your vehicle below.</p>
-            </div>
-
-            <div class="status">
-                ● ML PROJECT
-            </div>
-
-        </div>
-
-        <form id="carForm">
-
-            <div class="form-grid">
-
-                <!-- CAR NAME -->
-
-                <div class="field full">
-
-                    <label for="name">
-                        Car Model
-                    </label>
-
-                    <input
-                        type="text"
-                        id="name"
-                        placeholder="e.g. Maruti Swift Dzire VDI"
-                        required
-                    >
-
-                </div>
-
-                <!-- YEAR -->
-
-                <div class="field">
-
-                    <label for="year">
-                        Manufacturing Year
-                    </label>
-
-                    <input
-                        type="number"
-                        id="year"
-                        min="1992"
-                        max="2020"
-                        placeholder="e.g. 2018"
-                        required
-                    >
-
-                </div>
-
-                <!-- KM -->
-
-                <div class="field">
-
-                    <label for="km_driven">
-                        Kilometres Driven
-                    </label>
-
-                    <input
-                        type="number"
-                        id="km_driven"
-                        min="1"
-                        max="806599"
-                        placeholder="e.g. 45000"
-                        required
-                    >
-
-                </div>
-
-                <!-- FUEL -->
-
-                <div class="field">
-
-                    <label for="fuel">
-                        Fuel Type
-                    </label>
-
-                    <select id="fuel" required>
-
-                        <option value="">Select fuel</option>
-                        <option value="Petrol">Petrol</option>
-                        <option value="Diesel">Diesel</option>
-                        <option value="CNG">CNG</option>
-                        <option value="LPG">LPG</option>
-                        <option value="Electric">Electric</option>
-
-                    </select>
-
-                </div>
-
-                <!-- TRANSMISSION -->
-
-                <div class="field">
-
-                    <label for="transmission">
-                        Transmission
-                    </label>
-
-                    <select id="transmission" required>
-
-                        <option value="">Select transmission</option>
-                        <option value="Manual">Manual</option>
-                        <option value="Automatic">Automatic</option>
-
-                    </select>
-
-                </div>
-
-                <!-- SELLER -->
-
-                <div class="field">
-
-                    <label for="seller_type">
-                        Seller Type
-                    </label>
-
-                    <select id="seller_type" required>
-
-                        <option value="">Select seller</option>
-                        <option value="Individual">Individual</option>
-                        <option value="Dealer">Dealer</option>
-                        <option value="Trustmark Dealer">
-                            Trustmark Dealer
-                        </option>
-
-                    </select>
-
-                </div>
-
-                <!-- OWNER -->
-
-                <div class="field">
-
-                    <label for="owner">
-                        Previous Ownership
-                    </label>
-
-                    <select id="owner" required>
-
-                        <option value="">Select ownership</option>
-                        <option value="First Owner">First Owner</option>
-                        <option value="Second Owner">Second Owner</option>
-                        <option value="Third Owner">Third Owner</option>
-                        <option value="Fourth & Above Owner">
-                            Fourth & Above Owner
-                        </option>
-                        <option value="Test Drive Car">Test Drive Car</option>
-
-                    </select>
-
-                </div>
-
-            </div>
-
-            <button type="submit" class="predict-btn" id="predictBtn">
-                Predict Car Price →
-            </button>
-
-        </form>
-
-        <!-- RESULT -->
-
-        <div class="result" id="result">
-
-            <div class="result-label" id="resultLabel">
-                Estimated Resale Value
-            </div>
-
-            <div class="result-price" id="resultPrice">
-                ₹0
-            </div>
-
-            <p class="result-message" id="resultMessage"></p>
-
-        </div>
-
-    </section>
-
-    <!-- FEATURES -->
-
-    <section class="info">
-
-        <div class="info-box">
-
-            <h3>01 / Data</h3>
-
-            <p>
-                Uses historical used-car listings
-                to understand vehicle pricing patterns.
-            </p>
-
-        </div>
-
-        <div class="info-box">
-
-            <h3>02 / AI Model</h3>
-
-            <p>
-                Machine learning algorithms will
-                analyse the vehicle specifications.
-            </p>
-
-        </div>
-
-        <div class="info-box">
-
-            <h3>03 / Prediction</h3>
-
-            <p>
-                Generates an estimated resale price
-                after connecting to the trained model.
-            </p>
-
-        </div>
-
-    </section>
-
-</div>
-
-<!-- FOOTER -->
-
-<footer>
-    Built by <span>Thrishan</span> | AI & ML Project | 2026
-</footer>
-
 
 <script>
-
-// ======================================
-// BACKEND CONNECTION
-// ======================================
-
-// Later, replace this with your deployed
-// Python API address.
-//
-// Example:
-// const API_URL = "https://your-api.example.com/predict";
-
-const API_URL = "";
-
+const API_URL = "http://127.0.0.1:8000/predict";
 
 const form = document.getElementById("carForm");
-
 const result = document.getElementById("result");
-
 const resultPrice = document.getElementById("resultPrice");
-
 const resultMessage = document.getElementById("resultMessage");
-
 const resultLabel = document.getElementById("resultLabel");
-
 const predictBtn = document.getElementById("predictBtn");
 
-
-// ======================================
-// FORM SUBMISSION
-// ======================================
-
 form.addEventListener("submit", async function(event) {
-
     event.preventDefault();
 
+    const carName = document.getElementById("name").value.trim();
+
+    // Extract brand from the first word of the car name.
+    // Example: "Maruti Swift Dzire" becomes "Maruti".
+    const brand = carName.split(/\s+/)[0];
+
     const carData = {
-
-        name: document.getElementById("name").value.trim(),
-
+        brand: brand,
         year: Number(document.getElementById("year").value),
-
         km_driven: Number(document.getElementById("km_driven").value),
-
         fuel: document.getElementById("fuel").value,
-
         seller_type: document.getElementById("seller_type").value,
-
         transmission: document.getElementById("transmission").value,
-
         owner: document.getElementById("owner").value
-
     };
 
-
-    // Validate year
-
     if (carData.year < 1992 || carData.year > 2020) {
-
-        alert("Please enter a year between 1992 and 2020, matching our dataset.");
-
+        alert("Enter a manufacturing year between 1992 and 2020.");
         return;
-
     }
-
-
-    // Validate kilometres
 
     if (carData.km_driven < 1 || carData.km_driven > 806599) {
-
-        alert("Please enter kilometres within the dataset range.");
-
+        alert("Enter kilometres between 1 and 806599.");
         return;
-
     }
 
-
-    // Backend not connected yet
-
-    if (!API_URL) {
-
-        showResult(
-            "Backend Not Connected",
-            "—",
-            "Your vehicle details are ready. We still need to train and deploy the Python machine learning model before real predictions are available.",
-            true
-        );
-
-        console.log("Vehicle input:", carData);
-
-        return;
-
-    }
-
-
-    // Send request to Python ML API
+    predictBtn.disabled = true;
+    predictBtn.innerText = "Analysing Vehicle...";
+    result.classList.remove("show");
 
     try {
-
-        predictBtn.disabled = true;
-
-        predictBtn.innerText = "Analysing Vehicle...";
-
-        result.classList.remove("show");
-
-
         const response = await fetch(API_URL, {
-
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json"
             },
-
             body: JSON.stringify(carData)
-
         });
 
-
         if (!response.ok) {
-
-            throw new Error("Prediction server returned an error.");
-
+            const errorData = await response.text();
+            throw new Error("API Error " + response.status + ": " + errorData);
         }
-
 
         const data = await response.json();
 
-
         if (typeof data.predicted_price !== "number") {
-
-            throw new Error("Invalid prediction response.");
-
+            throw new Error("Invalid prediction received from the server.");
         }
 
-
         showResult(
-
             "Estimated Resale Value",
-
             "₹" + data.predicted_price.toLocaleString("en-IN", {
                 maximumFractionDigits: 0
             }),
-
-            "This is an estimated value generated by our machine learning model."
-
+            "Prediction generated by your trained machine learning model. This is an estimate, not a guaranteed market price."
         );
 
-
     } catch (error) {
-
         showResult(
             "Prediction Failed",
             "Unavailable",
-            error.message,
+            error.message + " Make sure your Python API is running.",
             true
         );
 
+        console.error("Prediction error:", error);
+
     } finally {
-
         predictBtn.disabled = false;
-
         predictBtn.innerText = "Predict Car Price →";
-
     }
-
 });
 
-
-// ======================================
-// DISPLAY RESULT
-// ======================================
-
 function showResult(label, price, message, isError = false) {
-
     resultLabel.innerText = label;
-
     resultPrice.innerText = price;
-
     resultMessage.innerText = message;
-
     resultPrice.classList.toggle("error", isError);
 
     result.classList.add("show");
@@ -818,11 +98,5 @@ function showResult(label, price, message, isError = false) {
         behavior: "smooth",
         block: "nearest"
     });
-
 }
-
 </script>
-
-</body>
-</html>
-
