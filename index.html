@@ -2,617 +2,872 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AutoPredict | Used Car Price Predictor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoPredict | Used Car Price Predictor</title>
+    <meta name="description" content="Predict the estimated market value of your used car with AutoPredict AI.">
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
-:root {
-    --bg: #080b0a;
-    --panel: #111714;
-    --panel2: #171f1b;
-    --green: #b6f36b;
-    --text: #f2f5f1;
-    --muted: #89958d;
-    --border: #26332b;
-}
+        :root {
+            --bg: #080d0b;
+            --surface: #101a15;
+            --surface2: #15231b;
+            --green: #a3f36b;
+            --green-dark: #75c947;
+            --text: #f1f5ef;
+            --muted: #91a095;
+            --border: rgba(163,243,107,.13);
+        }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-}
+        html {
+            scroll-behavior: smooth;
+        }
 
-html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            overflow-x: hidden;
+        }
 
-.container {
-    width: min(1100px, 92%);
-    margin: auto;
-}
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 80% 10%, rgba(117,201,71,.09), transparent 30%),
+                radial-gradient(circle at 10% 60%, rgba(117,201,71,.05), transparent 35%);
+        }
 
-/* NAVIGATION */
+        .navbar {
+            height: 78px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8%;
+            border-bottom: 1px solid var(--border);
+            background: rgba(8,13,11,.85);
+            backdrop-filter: blur(18px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-nav {
-    height: 80px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border);
-}
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 25px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
 
-.logo {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 23px;
-    font-weight: 700;
-    letter-spacing: -1px;
-}
+        .logo span {
+            color: var(--green);
+        }
 
-.logo span { color: var(--green); }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
 
-.nav-tag {
-    color: var(--green);
-    border: 1px solid #405b30;
-    padding: 8px 14px;
-    border-radius: 30px;
-    font-size: 12px;
-}
+        .nav-right a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: .3s;
+        }
 
-/* HERO */
+        .nav-right a:hover {
+            color: var(--green);
+        }
 
-.hero {
-    padding: 85px 0 55px;
-    text-align: center;
-}
+        .nav-status {
+            color: var(--green);
+            border: 1px solid var(--border);
+            padding: 8px 13px;
+            border-radius: 30px;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
 
-.eyebrow {
-    display: inline-block;
-    color: var(--green);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    margin-bottom: 22px;
-}
+        .hero {
+            min-height: 550px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 100px 20px 80px;
+            position: relative;
+        }
 
-.hero h1 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(36px, 6vw, 66px);
-    line-height: 1.08;
-    letter-spacing: -3px;
-    margin-bottom: 20px;
-}
+        .hero-tag {
+            border: 1px solid var(--border);
+            color: var(--green);
+            padding: 9px 17px;
+            border-radius: 30px;
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            margin-bottom: 28px;
+            background: rgba(163,243,107,.04);
+        }
 
-.hero h1 span { color: var(--green); }
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(42px, 7vw, 82px);
+            line-height: 1.04;
+            letter-spacing: -4px;
+            max-width: 900px;
+        }
 
-.hero p {
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.8;
-    max-width: 560px;
-    margin: auto;
-}
+        .hero h1 span {
+            color: var(--green);
+        }
 
-/* PREDICTOR */
+        .hero p {
+            color: var(--muted);
+            max-width: 570px;
+            line-height: 1.8;
+            margin-top: 24px;
+            font-size: 16px;
+        }
 
-.predictor {
-    max-width: 850px;
-    margin: 20px auto 90px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 35px;
-    box-shadow: 0 25px 80px rgba(0,0,0,.25);
-}
+        .hero-button {
+            margin-top: 35px;
+            display: inline-block;
+            background: var(--green);
+            color: #0a1208;
+            text-decoration: none;
+            padding: 15px 27px;
+            border-radius: 8px;
+            font-weight: 800;
+            transition: .3s;
+        }
 
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 30px;
-}
+        .hero-button:hover {
+            transform: translateY(-4px);
+            background: white;
+        }
 
-.card-header h2 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 23px;
-}
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            max-width: 750px;
+            width: 90%;
+            margin: 0 auto 90px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: rgba(16,26,21,.65);
+        }
 
-.card-header p {
-    color: var(--muted);
-    font-size: 13px;
-    margin-top: 7px;
-}
+        .stat {
+            padding: 25px 15px;
+            text-align: center;
+        }
 
-.status {
-    color: var(--green);
-    font-size: 11px;
-    white-space: nowrap;
-    background: #1d2b19;
-    padding: 8px 12px;
-    border-radius: 30px;
-}
+        .stat:not(:last-child) {
+            border-right: 1px solid var(--border);
+        }
 
-/* FORM */
+        .stat h3 {
+            color: var(--green);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 25px;
+        }
 
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 22px;
-}
+        .stat p {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 6px;
+        }
 
-.field {
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-}
+        .predict-section {
+            padding: 65px 20px 110px;
+            max-width: 1100px;
+            margin: auto;
+        }
 
-.field label {
-    color: #c5cec7;
-    font-size: 13px;
-    font-weight: 600;
-}
+        .section-heading {
+            text-align: center;
+            margin-bottom: 45px;
+        }
 
-input, select {
-    width: 100%;
-    height: 52px;
-    background: var(--panel2);
-    color: white;
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    padding: 0 14px;
-    outline: none;
-    font-size: 14px;
-    font-family: inherit;
-    transition: .2s;
-}
+        .section-heading small {
+            color: var(--green);
+            letter-spacing: 2px;
+            font-size: 11px;
+            font-weight: 700;
+        }
 
-input:focus, select:focus {
-    border-color: var(--green);
-    box-shadow: 0 0 0 3px rgba(182,243,107,.08);
-}
+        .section-heading h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(30px, 5vw, 45px);
+            margin-top: 12px;
+            letter-spacing: -1.5px;
+        }
 
-select option { background: #171f1b; }
+        .section-heading p {
+            color: var(--muted);
+            margin-top: 12px;
+            font-size: 14px;
+        }
 
-.full { grid-column: 1 / -1; }
+        .predict-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 30px 100px rgba(0,0,0,.25);
+        }
 
-/* BUTTON */
+        .form-side {
+            padding: 40px;
+        }
 
-.predict-btn {
-    width: 100%;
-    margin-top: 30px;
-    height: 58px;
-    background: var(--green);
-    color: #10170c;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 800;
-    cursor: pointer;
-    font-family: inherit;
-    transition: .25s;
-}
+        .form-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 23px;
+            margin-bottom: 8px;
+        }
 
-.predict-btn:hover {
-    background: #d1ff9b;
-    transform: translateY(-2px);
-}
+        .form-subtitle {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 32px;
+        }
 
-.predict-btn:disabled {
-    opacity: .6;
-    cursor: wait;
-    transform: none;
-}
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
 
-/* RESULT */
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
 
-.result {
-    display: none;
-    margin-top: 25px;
-    padding: 25px;
-    background: #172219;
-    border: 1px solid #3b5932;
-    border-radius: 12px;
-    text-align: center;
-}
+        .field.full {
+            grid-column: 1 / -1;
+        }
 
-.result.show {
-    display: block;
-    animation: appear .4s ease;
-}
+        label {
+            color: #c6d1c8;
+            font-size: 12px;
+            font-weight: 600;
+        }
 
-.result-label {
-    color: var(--muted);
-    font-size: 12px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
+        input, select {
+            width: 100%;
+            background: #0b120e;
+            color: var(--text);
+            border: 1px solid #26382b;
+            border-radius: 8px;
+            padding: 14px;
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+            transition: .3s;
+        }
 
-.result-price {
-    color: var(--green);
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(30px, 5vw, 45px);
-    font-weight: 700;
-    margin: 12px 0;
-}
+        input:focus, select:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(163,243,107,.08);
+        }
 
-.result-message {
-    color: #b4c1b7;
-    font-size: 13px;
-    line-height: 1.6;
-}
+        select option {
+            background: #101a15;
+        }
 
-.error { color: #ff9999; }
+        .predict-button {
+            width: 100%;
+            margin-top: 30px;
+            border: none;
+            background: var(--green);
+            color: #0a1208;
+            padding: 17px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            font-family: inherit;
+            transition: .3s;
+        }
 
-@keyframes appear {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+        .predict-button:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
 
-/* FEATURES */
+        .predict-button:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+            transform: none;
+        }
 
-.info {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    max-width: 850px;
-    margin: -55px auto 90px;
-}
+        .result-side {
+            background:
+                radial-gradient(circle at 50% 30%, rgba(163,243,107,.10), transparent 50%),
+                #0d1711;
+            border-left: 1px solid var(--border);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 500px;
+        }
 
-.info-box {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    padding: 22px;
-    border-radius: 12px;
-}
+        .result-icon {
+            width: 76px;
+            height: 76px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            display: grid;
+            place-items: center;
+            color: var(--green);
+            font-size: 32px;
+            margin-bottom: 25px;
+            background: rgba(163,243,107,.06);
+        }
 
-.info-box h3 {
-    color: var(--green);
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 16px;
-    margin-bottom: 8px;
-}
+        .result-label {
+            color: var(--muted);
+            font-size: 12px;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
 
-.info-box p {
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.6;
-}
+        .result-price {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--green);
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 700;
+            margin: 15px 0;
+            word-break: break-word;
+        }
 
-/* FOOTER */
+        .result-description {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+            max-width: 300px;
+        }
 
-footer {
-    border-top: 1px solid var(--border);
-    padding: 28px 0;
-    text-align: center;
-    color: var(--muted);
-    font-size: 12px;
-}
+        .result-note {
+            margin-top: 35px;
+            padding: 12px 16px;
+            background: rgba(163,243,107,.05);
+            border: 1px solid var(--border);
+            color: #b7c8b9;
+            border-radius: 8px;
+            font-size: 11px;
+            line-height: 1.6;
+        }
 
-footer span { color: var(--green); }
+        .error-message {
+            color: #ff8585;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-top: 20px;
+            max-width: 320px;
+            display: none;
+        }
 
-/* MOBILE */
+        .loading {
+            display: none;
+            margin-top: 20px;
+            color: var(--green);
+            font-size: 12px;
+        }
 
-@media(max-width: 650px) {
-    .hero { padding: 60px 0 35px; }
-    .hero h1 { letter-spacing: -1.5px; }
+        .spinner {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border: 2px solid rgba(163,243,107,.2);
+            border-top-color: var(--green);
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+            vertical-align: middle;
+            margin-right: 7px;
+        }
 
-    .predictor {
-        padding: 23px 17px;
-        margin-bottom: 80px;
-    }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
 
-    .form-grid {
-        grid-template-columns: 1fr;
-        gap: 17px;
-    }
+        .features {
+            max-width: 1050px;
+            margin: 0 auto;
+            padding: 20px 20px 100px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
 
-    .full { grid-column: auto; }
+        .feature {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 27px;
+            transition: .3s;
+        }
 
-    .card-header {
-        align-items: flex-start;
-        flex-direction: column;
-    }
+        .feature:hover {
+            transform: translateY(-5px);
+            border-color: rgba(163,243,107,.4);
+        }
 
-    .info {
-        grid-template-columns: 1fr;
-        margin-top: -45px;
-    }
-}
-</style>
+        .feature-icon {
+            color: var(--green);
+            font-size: 24px;
+            margin-bottom: 18px;
+        }
+
+        .feature h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .feature p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 30px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--muted);
+            font-size: 12px;
+            gap: 15px;
+        }
+
+        footer span {
+            color: var(--green);
+        }
+
+        @media(max-width: 800px) {
+            .predict-card {
+                grid-template-columns: 1fr;
+            }
+
+            .result-side {
+                border-left: none;
+                border-top: 1px solid var(--border);
+                min-height: 350px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-right a {
+                display: none;
+            }
+        }
+
+        @media(max-width: 520px) {
+            .navbar {
+                padding: 0 5%;
+                height: 68px;
+            }
+
+            .hero {
+                min-height: 480px;
+                padding-top: 75px;
+            }
+
+            .hero h1 {
+                letter-spacing: -2px;
+            }
+
+            .stats {
+                width: 95%;
+            }
+
+            .stat h3 {
+                font-size: 20px;
+            }
+
+            .stat p {
+                font-size: 10px;
+            }
+
+            .form-side, .result-side {
+                padding: 25px 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .field.full {
+                grid-column: auto;
+            }
+
+            footer {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="container">
+    <nav class="navbar">
+        <div class="logo">Auto<span>Predict.</span></div>
 
-    <nav>
-        <div class="logo">AUTO<span>PREDICT.</span></div>
-        <div class="nav-tag">AI / ML PROJECT</div>
+        <div class="nav-right">
+            <a href="#home">Home</a>
+            <a href="#predict">Predict Price</a>
+            <span class="nav-status">● AI POWERED</span>
+        </div>
     </nav>
 
-    <section class="hero">
-        <div class="eyebrow">MACHINE LEARNING POWERED</div>
+    <section class="hero" id="home">
+        <div class="hero-tag">INTELLIGENT AUTOMOTIVE VALUATION</div>
 
-        <h1>
-            Know Your Car's<br>
-            <span>Real Value.</span>
-        </h1>
+        <h1>Know what your car is <span>really worth.</span></h1>
 
         <p>
-            Discover an estimated resale value for your used car.
-            Enter its specifications and let our machine learning
-            model do the analysis.
+            Discover the estimated market value of your used car.
+            Enter your vehicle details and let our machine learning
+            model calculate an estimated price in seconds.
         </p>
+
+        <a href="#predict" class="hero-button">Calculate Car Value ↗</a>
     </section>
 
-    <section class="predictor">
-
-        <div class="card-header">
-            <div>
-                <h2>Vehicle Details</h2>
-                <p>Enter the details of your vehicle below.</p>
-            </div>
-            <div class="status">● ML MODEL CONNECTED</div>
+    <section class="stats">
+        <div class="stat">
+            <h3>AI</h3>
+            <p>Machine Learning</p>
         </div>
 
-        <form id="carForm">
+        <div class="stat">
+            <h3>7</h3>
+            <p>Vehicle Parameters</p>
+        </div>
 
-            <div class="form-grid">
+        <div class="stat">
+            <h3>₹ INR</h3>
+            <p>Indian Market</p>
+        </div>
+    </section>
 
-                <div class="field full">
-                    <label for="name">Car Model</label>
-                    <input
-                        type="text"
-                        id="name"
-                        placeholder="e.g. Maruti Swift Dzire VDI"
-                        required
-                    >
+    <section class="predict-section" id="predict">
+
+        <div class="section-heading">
+            <small>THE PREDICTION ENGINE</small>
+            <h2>Calculate your car's value.</h2>
+            <p>Fill in the vehicle information below to get an estimated price.</p>
+        </div>
+
+        <div class="predict-card">
+
+            <div class="form-side">
+
+                <h3 class="form-title">Vehicle Information</h3>
+                <p class="form-subtitle">Enter accurate details for a better estimate.</p>
+
+                <form id="carForm">
+
+                    <div class="form-grid">
+
+                        <div class="field full">
+                            <label for="brand">Car Brand</label>
+                            <input
+                                type="text"
+                                id="brand"
+                                placeholder="Example: Maruti, Hyundai, Honda"
+                                required
+                            >
+                        </div>
+
+                        <div class="field">
+                            <label for="year">Manufacturing Year</label>
+                            <input
+                                type="number"
+                                id="year"
+                                placeholder="2018"
+                                min="1990"
+                                max="2026"
+                                required
+                            >
+                        </div>
+
+                        <div class="field">
+                            <label for="km_driven">Kilometres Driven</label>
+                            <input
+                                type="number"
+                                id="km_driven"
+                                placeholder="45000"
+                                min="0"
+                                required
+                            >
+                        </div>
+
+                        <div class="field">
+                            <label for="fuel">Fuel Type</label>
+                            <select id="fuel" required>
+                                <option value="">Select fuel</option>
+                                <option value="Petrol">Petrol</option>
+                                <option value="Diesel">Diesel</option>
+                                <option value="CNG">CNG</option>
+                                <option value="LPG">LPG</option>
+                                <option value="Electric">Electric</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="seller_type">Seller Type</label>
+                            <select id="seller_type" required>
+                                <option value="">Select seller</option>
+                                <option value="Individual">Individual</option>
+                                <option value="Dealer">Dealer</option>
+                                <option value="Trustmark Dealer">Trustmark Dealer</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="transmission">Transmission</label>
+                            <select id="transmission" required>
+                                <option value="">Select transmission</option>
+                                <option value="Manual">Manual</option>
+                                <option value="Automatic">Automatic</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="owner">Ownership</label>
+                            <select id="owner" required>
+                                <option value="">Select ownership</option>
+                                <option value="First Owner">First Owner</option>
+                                <option value="Second Owner">Second Owner</option>
+                                <option value="Third Owner">Third Owner</option>
+                                <option value="Fourth & Above Owner">Fourth & Above Owner</option>
+                                <option value="Test Drive Car">Test Drive Car</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="predict-button" id="predictBtn">
+                        Predict Car Price →
+                    </button>
+
+                </form>
+
+            </div>
+
+            <div class="result-side">
+
+                <div class="result-icon">₹</div>
+
+                <div class="result-label">ESTIMATED MARKET VALUE</div>
+
+                <div class="result-price" id="resultPrice">₹ --</div>
+
+                <p class="result-description" id="resultDescription">
+                    Your estimated car value will appear here after you submit the vehicle details.
+                </p>
+
+                <div class="loading" id="loading">
+                    <span class="spinner"></span>
+                    Analysing vehicle details...
                 </div>
 
-                <div class="field">
-                    <label for="year">Manufacturing Year</label>
-                    <input
-                        type="number"
-                        id="year"
-                        min="1992"
-                        max="2020"
-                        placeholder="e.g. 2018"
-                        required
-                    >
-                </div>
+                <div class="error-message" id="errorMessage"></div>
 
-                <div class="field">
-                    <label for="km_driven">Kilometres Driven</label>
-                    <input
-                        type="number"
-                        id="km_driven"
-                        min="1"
-                        max="806599"
-                        placeholder="e.g. 45000"
-                        required
-                    >
-                </div>
-
-                <div class="field">
-                    <label for="fuel">Fuel Type</label>
-                    <select id="fuel" required>
-                        <option value="">Select fuel</option>
-                        <option value="Petrol">Petrol</option>
-                        <option value="Diesel">Diesel</option>
-                        <option value="CNG">CNG</option>
-                        <option value="LPG">LPG</option>
-                        <option value="Electric">Electric</option>
-                    </select>
-                </div>
-
-                <div class="field">
-                    <label for="transmission">Transmission</label>
-                    <select id="transmission" required>
-                        <option value="">Select transmission</option>
-                        <option value="Manual">Manual</option>
-                        <option value="Automatic">Automatic</option>
-                    </select>
-                </div>
-
-                <div class="field">
-                    <label for="seller_type">Seller Type</label>
-                    <select id="seller_type" required>
-                        <option value="">Select seller</option>
-                        <option value="Individual">Individual</option>
-                        <option value="Dealer">Dealer</option>
-                        <option value="Trustmark Dealer">Trustmark Dealer</option>
-                    </select>
-                </div>
-
-                <div class="field">
-                    <label for="owner">Previous Ownership</label>
-                    <select id="owner" required>
-                        <option value="">Select ownership</option>
-                        <option value="First Owner">First Owner</option>
-                        <option value="Second Owner">Second Owner</option>
-                        <option value="Third Owner">Third Owner</option>
-                        <option value="Fourth & Above Owner">Fourth & Above Owner</option>
-                        <option value="Test Drive Car">Test Drive Car</option>
-                    </select>
+                <div class="result-note">
+                    This is an AI-generated estimate, not a guaranteed selling price.
+                    Actual market value may vary.
                 </div>
 
             </div>
 
-            <button type="submit" class="predict-btn" id="predictBtn">
-                Predict Car Price →
-            </button>
-
-        </form>
-
-        <div class="result" id="result">
-            <div class="result-label" id="resultLabel">
-                Estimated Resale Value
-            </div>
-
-            <div class="result-price" id="resultPrice">₹0</div>
-
-            <p class="result-message" id="resultMessage"></p>
         </div>
 
     </section>
 
-    <section class="info">
+    <section class="features">
 
-        <div class="info-box">
-            <h3>01 / Data</h3>
+        <div class="feature">
+            <div class="feature-icon">✦</div>
+            <h3>Machine Learning</h3>
             <p>
-                Uses historical used-car listings
-                to understand vehicle pricing patterns.
+                Uses a trained Random Forest regression model
+                to estimate used car prices from vehicle information.
             </p>
         </div>
 
-        <div class="info-box">
-            <h3>02 / AI Model</h3>
+        <div class="feature">
+            <div class="feature-icon">◈</div>
+            <h3>Instant Prediction</h3>
             <p>
-                A trained Random Forest machine learning model
-                analyses the vehicle specifications.
+                Submit your vehicle details and receive a price
+                estimate from the prediction API.
             </p>
         </div>
 
-        <div class="info-box">
-            <h3>03 / Prediction</h3>
+        <div class="feature">
+            <div class="feature-icon">⌁</div>
+            <h3>Simple Experience</h3>
             <p>
-                Generates an estimated resale price
-                using the trained model.
+                A straightforward interface to help users
+                understand the estimated value of a used car.
             </p>
         </div>
 
     </section>
 
-</div>
+    <footer>
+        <div class="logo">Auto<span>Predict.</span></div>
+        <p>Built with Machine Learning · <span>2026</span></p>
+        <p>AI-powered car price estimation</p>
+    </footer>
 
-<footer>
-    Built by <span>Thrishan</span> | AI & ML Project | 2026
-</footer>
+    <script>
+        // Your deployed Render backend
+        const API_URL = "https://used-car-price-predictor-g0hw.onrender.com/predict";
 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
+        const carForm = document.getElementById("carForm");
+        const predictBtn = document.getElementById("predictBtn");
 
-    // LOCAL TESTING API ADDRESS
-    const API_URL = "http://127.0.0.1:8000/predict";
+        const resultPrice = document.getElementById("resultPrice");
+        const resultDescription = document.getElementById("resultDescription");
+        const loading = document.getElementById("loading");
+        const errorMessage = document.getElementById("errorMessage");
 
-    const form = document.getElementById("carForm");
-    const result = document.getElementById("result");
-    const resultPrice = document.getElementById("resultPrice");
-    const resultMessage = document.getElementById("resultMessage");
-    const resultLabel = document.getElementById("resultLabel");
-    const predictBtn = document.getElementById("predictBtn");
+        carForm.addEventListener("submit", async function(event) {
 
-    if (!form || !result || !predictBtn) {
-        console.error("AutoPredict: Required HTML elements are missing.");
-        return;
-    }
+            event.preventDefault();
 
-    form.addEventListener("submit", async function(event) {
-        event.preventDefault();
+            // Collect vehicle information
+            const carData = {
+                brand: document.getElementById("brand").value.trim(),
+                year: Number(document.getElementById("year").value),
+                km_driven: Number(document.getElementById("km_driven").value),
+                fuel: document.getElementById("fuel").value,
+                seller_type: document.getElementById("seller_type").value,
+                transmission: document.getElementById("transmission").value,
+                owner: document.getElementById("owner").value
+            };
 
-        const carName = document.getElementById("name").value.trim();
-
-        if (!carName) {
-            alert("Please enter the car model.");
-            return;
-        }
-
-        // Extract first word as brand.
-        // Example: Maruti Swift Dzire -> Maruti
-        const brand = carName.split(/\s+/)[0];
-
-        const carData = {
-            brand: brand,
-            year: Number(document.getElementById("year").value),
-            km_driven: Number(document.getElementById("km_driven").value),
-            fuel: document.getElementById("fuel").value,
-            seller_type: document.getElementById("seller_type").value,
-            transmission: document.getElementById("transmission").value,
-            owner: document.getElementById("owner").value
-        };
-
-        if (carData.year < 1992 || carData.year > 2020) {
-            alert("Please enter a year between 1992 and 2020.");
-            return;
-        }
-
-        if (carData.km_driven < 1 || carData.km_driven > 806599) {
-            alert("Please enter kilometres within the supported dataset range.");
-            return;
-        }
-
-        predictBtn.disabled = true;
-        predictBtn.innerText = "Analysing Vehicle...";
-        result.classList.remove("show");
-
-        try {
-            const response = await fetch(API_URL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(carData)
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error("API error " + response.status + ": " + errorText);
+            // Basic validation
+            if (!carData.brand || carData.brand.includes(" ")) {
+                showError("Enter one car brand only, such as Maruti, Hyundai or Honda.");
+                return;
             }
 
-            const data = await response.json();
-
-            if (typeof data.predicted_price !== "number") {
-                throw new Error("The API returned an invalid prediction.");
+            if (carData.year < 1990 || carData.year > 2026) {
+                showError("Please enter a valid manufacturing year.");
+                return;
             }
 
-            showResult(
-                "Estimated Resale Value",
-                "₹" + data.predicted_price.toLocaleString("en-IN", {
+            if (carData.km_driven < 0) {
+                showError("Kilometres driven cannot be negative.");
+                return;
+            }
+
+            // Start loading
+            predictBtn.disabled = true;
+            predictBtn.textContent = "Predicting...";
+            loading.style.display = "block";
+            errorMessage.style.display = "none";
+
+            resultPrice.textContent = "Calculating...";
+            resultDescription.textContent = "Your vehicle details are being analysed.";
+
+            try {
+
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(carData)
+                });
+
+                if (!response.ok) {
+                    throw new Error("Server returned an error: " + response.status);
+                }
+
+                const result = await response.json();
+
+                if (typeof result.predicted_price !== "number" ||
+                    !Number.isFinite(result.predicted_price)) {
+                    throw new Error("The prediction response was invalid.");
+                }
+
+                const formattedPrice = new Intl.NumberFormat("en-IN", {
+                    style: "currency",
+                    currency: "INR",
                     maximumFractionDigits: 0
-                }),
-                "Generated by your trained Random Forest model. This is an estimate, not a guaranteed selling price."
-            );
+                }).format(result.predicted_price);
 
-        } catch (error) {
-            console.error("Prediction error:", error);
+                resultPrice.textContent = formattedPrice;
 
-            showResult(
-                "Prediction Failed",
-                "Unavailable",
-                error.message + " Check whether the Python backend is running.",
-                true
-            );
+                resultDescription.textContent =
+                    "Based on the details provided, this is the estimated market value of your vehicle.";
 
-        } finally {
-            predictBtn.disabled = false;
-            predictBtn.innerText = "Predict Car Price →";
-        }
-    });
+            } catch (error) {
 
-    function showResult(label, price, message, isError = false) {
-        resultLabel.innerText = label;
-        resultPrice.innerText = price;
-        resultMessage.innerText = message;
-        resultPrice.classList.toggle("error", isError);
-        result.classList.add("show");
+                console.error("Prediction error:", error);
 
-        result.scrollIntoView({
-            behavior: "smooth",
-            block: "nearest"
+                resultPrice.textContent = "Unavailable";
+
+                if (error.name === "TypeError") {
+                    showError(
+                        "Unable to connect to the prediction server. " +
+                        "The free server may be starting up. Please wait 60 seconds and try again."
+                    );
+                } else {
+                    showError(
+                        "Prediction failed. Please check your vehicle details and try again. " +
+                        error.message
+                    );
+                }
+
+                resultDescription.textContent =
+                    "We couldn't calculate your estimate right now.";
+
+            } finally {
+
+                loading.style.display = "none";
+                predictBtn.disabled = false;
+                predictBtn.textContent = "Predict Car Price →";
+
+            }
+
         });
-    }
 
-});
-</script>
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = "block";
+        }
+
+    </script>
 
 </body>
 </html>
